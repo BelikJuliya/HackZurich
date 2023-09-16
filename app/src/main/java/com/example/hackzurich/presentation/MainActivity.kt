@@ -27,6 +27,7 @@ import java.util.Date
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
+
     val TAG = this.javaClass.simpleName
 
     private val messageAdapter by lazy {
@@ -46,10 +47,14 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         initUI()
         viewModel.itemsLiveData.observe(this) {
             messageAdapter.submitList(it)
-            val newPosition = messageAdapter.itemCount - 1 // Получаем позицию последнего элемента в адаптере
-            binding.rvMessages.scrollToPosition(newPosition)
+            try {
+                val newPosition = messageAdapter.itemCount - 1
+                binding.rvMessages.scrollToPosition(newPosition)
+            } catch (ex: ArrayIndexOutOfBoundsException) {
+                Log.e(TAG, "onCreate: ", ex)
+            }
         }
-        viewModel.clearInputLiveData.observe(this){
+        viewModel.clearInputLiveData.observe(this) {
             binding.etInput.text.clear()
         }
     }
@@ -68,6 +73,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             }
         }
     }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
@@ -80,7 +86,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         }
     }
 
-    private fun checkPermissions(){
+    private fun checkPermissions() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             // Разрешение на камеру не предоставлено, запросите его.
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST_CODE)

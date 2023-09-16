@@ -42,9 +42,9 @@ class MessageViewModel @Inject constructor(
                 message = currentMessageText
             )
             mapItems(userMessage)
+            clearInputLiveData.postValue(true)
             val botAnswer = postMessageUseCase.postMessage(userMessage)
             mapItems(botAnswer)
-            clearInputLiveData.postValue(true)
         }
     }
 
@@ -77,9 +77,9 @@ class MessageViewModel @Inject constructor(
                 bitmap = bitmap
             )
             mapItems(userMessage)
+            clearInputLiveData.postValue(true)
             val botAnswer = postMessageUseCase.postMessage(userMessage)
             mapItems(botAnswer)
-            clearInputLiveData.postValue(true)
         }
     }
 }
