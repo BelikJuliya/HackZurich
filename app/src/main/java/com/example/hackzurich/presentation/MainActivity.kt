@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private val viewModel: MessageViewModel by viewModels()
     private val binding: ActivityMainBinding by viewBinding()
 
+    lateinit var currentPhotoPath: String
     private val CAMERA_PERMISSION_REQUEST_CODE = 1
     private val REQUEST_IMAGE_CAPTURE = 2
 
@@ -45,6 +46,8 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         initUI()
         viewModel.itemsLiveData.observe(this) {
             messageAdapter.submitList(it)
+            val newPosition = messageAdapter.itemCount - 1 // Получаем позицию последнего элемента в адаптере
+            binding.rvMessages.scrollToPosition(newPosition)
         }
         viewModel.clearInputLiveData.observe(this){
             binding.etInput.text.clear()
@@ -77,7 +80,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         }
     }
 
-
     private fun checkPermissions(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             // Разрешение на камеру не предоставлено, запросите его.
@@ -108,8 +110,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         }
     }
 
-    lateinit var currentPhotoPath: String
-
     @Throws(IOException::class)
     private fun createImageFile(): File {
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
@@ -123,34 +123,12 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         }
     }
 
-    private fun galleryAddPic() {
-        Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE).also { mediaScanIntent ->
-            val f = File(currentPhotoPath)
-            mediaScanIntent.data = Uri.fromFile(f)
-            sendBroadcast(mediaScanIntent)
-        }
-    }
-
-    private fun setPic(currentPhotoPath: String) {
-        // Get the dimensions of the View
-//        val targetW: Int = imageView.width
-//        val targetH: Int = imageView.height
-
+    private fun setPic() {
         val bmOptions = BitmapFactory.Options().apply {
-            // Get the dimensions of the bitmap
             inJustDecodeBounds = true
 
             BitmapFactory.decodeFile(this@MainActivity.currentPhotoPath, this)
-
-//            val photoW: Int = outWidth
-//            val photoH: Int = outHeight
-
-            // Determine how much to scale down the image
-//            val scaleFactor: Int = Math.max(1, Math.min(photoW / targetW, photoH / targetH))
-
-            // Decode the image file into a Bitmap sized to fill the View
             inJustDecodeBounds = false
-//            inSampleSize = scaleFactor
             inPurgeable = true
         }
         BitmapFactory.decodeFile(this.currentPhotoPath, bmOptions)?.also { bitmap ->
@@ -161,7 +139,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            setPic(currentPhotoPath)
+            setPic()
         }
     }
 }
