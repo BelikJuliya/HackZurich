@@ -44,12 +44,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/user_name">
 
+        <ImageView
+            android:id="@+id/ivPicture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxHeight="100dp"
+            tools:visibility="gone"
+            android:src="@drawable/outgoing"
+            android:layout_margin="16dp" />
+
         <TextView
-            android:id="@+id/bot_message"
+            android:id="@+id/tv_message"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="16dp"
             android:textSize="17sp"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -64,7 +74,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:text="17.05.1996"
+        tools:text="17.05.1996"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/cv_bot_message"
         app:layout_constraintTop_toBottomOf="@+id/cv_bot_message" />

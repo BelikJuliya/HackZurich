@@ -1,11 +1,13 @@
 package com.example.hackzurich.domain.model
 
+import android.graphics.Bitmap
 import android.util.Log
 import com.example.hackzurich.domain.BaseModelPayload
 
 data class UserMessage(
-    val message: String,
-    val imageUrl: String? = null
+    val message: String? = null,
+    val image: String? = null,
+    val bitmap: Bitmap? = null
 ): BaseModel {
     val TAG = this.javaClass.simpleName
 
@@ -18,7 +20,7 @@ data class UserMessage(
         Log.d(TAG, "isContentDiff: ")
         if (other !is UserMessage) return false
         if (other.message != this.message) return false
-        if (other.imageUrl != this.imageUrl) return false
+        if (other.image != this.image) return false
         return true
     }
 

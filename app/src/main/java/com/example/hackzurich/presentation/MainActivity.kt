@@ -154,7 +154,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             inPurgeable = true
         }
         BitmapFactory.decodeFile(this.currentPhotoPath, bmOptions)?.also { bitmap ->
-            viewModel.handleVideo(bitmap.toString())
+            viewModel.handlePicture(bitmap)
         }
     }
 

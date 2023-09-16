@@ -1,6 +1,9 @@
 package com.example.hackzurich.presentation.delegates
 
+import android.provider.ContactsContract.RawContacts.Data
 import android.view.ViewGroup
+import androidx.core.view.isVisible
+import com.bumptech.glide.Glide
 import com.example.hackzurich.R
 import com.example.hackzurich.base.AdapterDelegate
 import com.example.hackzurich.base.BaseViewHolder
@@ -17,19 +20,32 @@ class UserMessageHolder(
 
     override fun bind(model: BaseModel, viewHolder: BaseViewHolder) {
         binding = ItemUserMessageBinding.bind(itemView)
-        with(binding) {
-            model as UserMessage
+        model as UserMessage
+//        binding.messageDate.text = Data
+        if (model.image == null) {
             bindMessage(model)
+        } else {
+            bindImage(model)
+        }
+    }
+
+    private fun bindImage(model: BaseModel) {
+        model as UserMessage
+        with(binding) {
+            ivPicture.isVisible = true
+            tvMessage.isVisible = false
+            Glide.with(itemView).load(model.bitmap).into(ivPicture)
         }
     }
 
     private fun bindMessage(model: BaseModel) {
         model as UserMessage
         with(binding) {
-            botMessage.text = model.message
+            ivPicture.isVisible = false
+            tvMessage.isVisible = true
+            tvMessage.text = model.message
         }
     }
-
 
     override fun bindPayload(
         model: BaseModel,
