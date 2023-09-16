@@ -44,10 +44,8 @@ class MessageViewModel @Inject constructor(
                 Log.d(TAG, "item = $it")
             }
 
-//            items.add(userMessage)
             mapItems(userMessage)
             val newMessage = postMessageUseCase.postMessage(currentMessageText)
-//            items.add(newMessage)
             mapItems(newMessage)
 //            itemsLiveData.postValue(items)
             Log.d(TAG, "livedata became")
@@ -56,12 +54,6 @@ class MessageViewModel @Inject constructor(
             }
             clearInputLiveData.postValue(true)
         }
-//        val newItems = profileList.value ?: mutableListOf()
-//        profileList.value = newItems.map {
-//            if (it is UserProfile) {
-//                it.copy(coinBalance = CoinBalance(balance, date))
-//            } else it
-//        }.toMutableList()
     }
 
     private fun mapItems(newItem: BaseModel) {
