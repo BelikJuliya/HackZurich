@@ -3,7 +3,8 @@ package com.example.hackzurich.domain.model
 import com.example.hackzurich.domain.BaseModelPayload
 
 data class UserMessage(
-    val message: String
+    val message: String,
+    val imageUrl: String? = null
 ): BaseModel {
 
     override fun isIdDiff(other: BaseModel): Boolean {

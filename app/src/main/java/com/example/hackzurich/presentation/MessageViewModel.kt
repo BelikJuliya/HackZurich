@@ -44,10 +44,6 @@ class MessageViewModel @Inject constructor(
         }
     }
 
-    fun addDocument() {
-
-    }
-
     fun handleVideo(path: String) {
         val videoFile = File(path)
 //        videos.add(Video(title = videoFile.name))

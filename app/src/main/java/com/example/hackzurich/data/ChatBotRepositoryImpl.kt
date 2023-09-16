@@ -9,6 +9,11 @@ class ChatBotRepositoryImpl @Inject constructor(
 ) : IChatBotRepository {
 
     override suspend fun postMessage(message: String): BotMessage {
-        return apiService.postMessage(MessageRequest(message)).toDomainObject()
+        return apiService.postMessage(
+            messageBody = MessageRequest(message),
+            connection = "keep-alive",
+            acceptCharset = "utf-8",
+            contentType = "application/json"
+        ).toDomainObject()
     }
 }

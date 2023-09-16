@@ -43,5 +43,5 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun providesBaseUrl(): String = "http://192.168.17.13:8080/api/"
+    fun providesBaseUrl(): String = "https://192.168.17.13:8443/api/"
 }
