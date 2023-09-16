@@ -11,17 +11,22 @@ import com.example.hackzurich.databinding.ItemUserMessageBinding
 import com.example.hackzurich.domain.model.BaseModel
 import com.example.hackzurich.domain.BaseModelPayload
 import com.example.hackzurich.domain.model.UserMessage
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class UserMessageHolder(
     val parent: ViewGroup,
 ) : BaseViewHolder(parent, R.layout.item_user_message) {
 
     private lateinit var binding: ItemUserMessageBinding
+    private val dateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
 
     override fun bind(model: BaseModel, viewHolder: BaseViewHolder) {
         binding = ItemUserMessageBinding.bind(itemView)
         model as UserMessage
-//        binding.messageDate.text = Data
+        val dateString = dateFormat.format(Date())
+        binding.messageDate.text = "Sent $dateString"
         if (model.image == null) {
             bindMessage(model)
         } else {
