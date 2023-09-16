@@ -8,7 +8,11 @@ import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import by.kirich1409.viewbindingdelegate.ViewBindingProperty
 import by.kirich1409.viewbindingdelegate.viewBinding
-
+import okhttp3.OkHttpClient
+import java.security.cert.CertificateException
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManager
+import javax.net.ssl.X509TrustManager
 
 inline fun <reified T : ViewBinding> Fragment.viewBinding(): ViewBindingProperty<Fragment, T> {
     return viewBinding()
@@ -35,4 +39,45 @@ fun getRealPathFromURIPath(contentURI: Uri, context: Context): String {
             }
         }
     }
+}
+@Suppress("DEPRECATION")
+fun OkHttpClient.Builder.trustAll(): OkHttpClient.Builder {
+    hostnameVerifier { _, _ -> true }
+    try {
+        // Create a trust manager that does not validate certificate chains
+        val naiveTrustManager = object : X509TrustManager {
+
+            @Throws(CertificateException::class)
+            override fun checkClientTrusted(
+                chain: Array<java.security.cert.X509Certificate>,
+                authType: String
+            ) {
+//                Timber.i("checkClientTrusted")
+            }
+
+            @Throws(CertificateException::class)
+            override fun checkServerTrusted(
+                chain: Array<java.security.cert.X509Certificate>,
+                authType: String
+            ) {
+//                Timber.i("checkServerTrusted")
+            }
+
+            override fun getAcceptedIssuers(): Array<java.security.cert.X509Certificate> {
+                return arrayOf()
+            }
+        }
+
+        val trustAllCerts = arrayOf<TrustManager>(naiveTrustManager)
+        // Install the all-trusting trust manager
+        val sslContext = SSLContext.getInstance("SSL")
+        sslContext.init(null, trustAllCerts, java.security.SecureRandom())
+        // Create an ssl socket factory with our all-trusting manager
+        val sslSocketFactory = sslContext.socketFactory
+
+        sslSocketFactory(sslSocketFactory, naiveTrustManager)
+    } catch (e: Exception) {
+//        Timber.e(e)
+    }
+    return this
 }

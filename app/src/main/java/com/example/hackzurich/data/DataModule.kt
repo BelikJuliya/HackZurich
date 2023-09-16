@@ -2,6 +2,7 @@ package com.example.hackzurich.data
 
 import android.content.Context
 import com.chuckerteam.chucker.api.ChuckerInterceptor
+import com.example.hackzurich.base.trustAll
 import com.example.hackzurich.domain.IChatBotRepository
 import dagger.Module
 import dagger.Provides
@@ -21,6 +22,7 @@ class DataModule {
     @Singleton
     fun provideOkHttpClient(@ApplicationContext appContext: Context): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(ChuckerInterceptor(appContext))
+        .trustAll()
         .build()
 
     @Provides

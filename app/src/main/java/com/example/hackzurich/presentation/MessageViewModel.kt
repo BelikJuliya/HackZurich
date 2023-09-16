@@ -1,5 +1,6 @@
 package com.example.hackzurich.presentation
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,6 +23,7 @@ class MessageViewModel @Inject constructor(
     val itemsLiveData = MutableLiveData<MutableList<BaseModel>>()
     val clearInputLiveData = MutableLiveData<Boolean>()
     var currentMessageText: String = ""
+    val TAG = this.javaClass.simpleName
 
     init {
         items.add(
@@ -37,11 +39,37 @@ class MessageViewModel @Inject constructor(
             val userMessage = UserMessage(
                 message = currentMessageText
             )
-            items.add(userMessage)
+            Log.d(TAG, "livedata was")
+            itemsLiveData.value?.forEach {
+                Log.d(TAG, "item = $it")
+            }
+
+//            items.add(userMessage)
+            mapItems(userMessage)
             val newMessage = postMessageUseCase.postMessage(currentMessageText)
-            items.add(newMessage)
-            itemsLiveData.postValue(items)
+//            items.add(newMessage)
+            mapItems(newMessage)
+//            itemsLiveData.postValue(items)
+            Log.d(TAG, "livedata became")
+            itemsLiveData.value?.forEach {
+                Log.d(TAG, "item = $it")
+            }
+            clearInputLiveData.postValue(true)
         }
+//        val newItems = profileList.value ?: mutableListOf()
+//        profileList.value = newItems.map {
+//            if (it is UserProfile) {
+//                it.copy(coinBalance = CoinBalance(balance, date))
+//            } else it
+//        }.toMutableList()
+    }
+
+    private fun mapItems(newItem: BaseModel) {
+        val oldItems = itemsLiveData.value
+        val newItems = ArrayList<BaseModel>()
+        oldItems?.forEach { newItems.add(it) }
+        newItems.add(newItem)
+        itemsLiveData.postValue(newItems)
     }
 
     fun handleVideo(path: String) {

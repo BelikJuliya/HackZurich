@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
@@ -30,6 +31,7 @@ import java.util.Date
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
+    val TAG = this.javaClass.simpleName
 
     private val messageAdapter by lazy {
         ChatBotAdapter(
@@ -41,20 +43,12 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private val CAMERA_PERMISSION_REQUEST_CODE = 1
     private val REQUEST_IMAGE_CAPTURE = 2
 
-    private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val imageBitmap: Bitmap? = result.data?.extras?.get("data") as Bitmap?
-            if (imageBitmap != null) {
-                // Обработайте изображение, которое было сделано с камеры (imageBitmap).
-            }
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initUI()
         viewModel.itemsLiveData.observe(this) {
+            Log.d(TAG, "livedata received $it")
             messageAdapter.submitList(it)
         }
         viewModel.clearInputLiveData.observe(this){
@@ -76,12 +70,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             }
         }
     }
-
-    private fun takePicture() {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        resultLauncher.launch(intent)
-    }
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
@@ -100,7 +88,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             // Разрешение на камеру не предоставлено, запросите его.
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), CAMERA_PERMISSION_REQUEST_CODE)
         } else {
-            takePicture()
+            dispatchTakePictureIntent()
         }
 
     }
@@ -185,7 +173,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            val imageBitmap = data?.extras?.get("data") as Bitmap
+            val imageBitmap = data?.extras?.get("data") as Bitmap?
            // imageView.setImageBitmap(imageBitmap)
         }
     }
