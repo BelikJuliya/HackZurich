@@ -1,6 +1,5 @@
 package com.example.hackzurich.presentation.delegates
 
-import android.provider.ContactsContract.RawContacts.Data
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
@@ -38,7 +37,7 @@ class UserMessageHolder(
         model as UserMessage
         with(binding) {
             ivPicture.isVisible = true
-            tvMessage.isVisible = false
+            tvUserMessage.isVisible = false
             Glide.with(itemView).load(model.bitmap).into(ivPicture)
         }
     }
@@ -47,8 +46,8 @@ class UserMessageHolder(
         model as UserMessage
         with(binding) {
             ivPicture.isVisible = false
-            tvMessage.isVisible = true
-            tvMessage.text = model.message
+            tvUserMessage.isVisible = true
+            tvUserMessage.text = model.message
         }
     }
 
