@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.hackzurich.domain.BaseModel
+import com.example.hackzurich.domain.model.BaseModel
 
 abstract class BaseViewHolder : RecyclerView.ViewHolder {
 

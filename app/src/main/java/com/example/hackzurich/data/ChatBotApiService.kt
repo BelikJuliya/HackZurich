@@ -1,12 +1,14 @@
 package com.example.hackzurich.data
 
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface ChatBotApiService {
 
-    @GET("postMessage")
+    @POST("request")
     suspend fun postMessage(
-        @Path("userMessage") userMessage: String,
+        @Body messageBody: MessageRequest,
     ): MessageResponse
 }

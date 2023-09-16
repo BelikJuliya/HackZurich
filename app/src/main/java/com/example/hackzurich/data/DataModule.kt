@@ -43,5 +43,5 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun providesBaseUrl(): String = "https://api.apilayer.com/exchangerates_data/" // TODO set real url
+    fun providesBaseUrl(): String = "http://192.168.17.13:8080/api/"
 }

@@ -6,7 +6,7 @@ import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.hackzurich.domain.BaseModel
+import com.example.hackzurich.domain.model.BaseModel
 
 open class BaseRecyclerAdapter(
     delegates: List<AdapterDelegate>,

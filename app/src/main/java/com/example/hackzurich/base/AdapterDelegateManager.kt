@@ -1,7 +1,7 @@
 package com.example.hackzurich.base
 
 import androidx.collection.SparseArrayCompat
-import com.example.hackzurich.domain.BaseModel
+import com.example.hackzurich.domain.model.BaseModel
 
 class AdapterDelegateManager {
 

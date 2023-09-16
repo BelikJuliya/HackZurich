@@ -1,4 +1,4 @@
-package com.example.hackzurich.domain
+package com.example.hackzurich.domain.model
 
 interface BaseModel {
 

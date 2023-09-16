@@ -1,7 +1,7 @@
 package com.example.hackzurich.base
 
 import androidx.recyclerview.widget.DiffUtil
-import com.example.hackzurich.domain.BaseModel
+import com.example.hackzurich.domain.model.BaseModel
 
 class BaseDiffUtil<T : BaseModel> : DiffUtil.ItemCallback<T>() {
 

@@ -8,27 +8,28 @@ import com.example.hackzurich.databinding.ItemBotMessageBinding
 import com.example.hackzurich.domain.model.BaseModel
 import com.example.hackzurich.domain.BaseModelPayload
 import com.example.hackzurich.domain.model.BotMessage
+import com.example.hackzurich.domain.model.UserMessage
 
-class BotMessageHolder(
+class UserMessageHolder(
     val parent: ViewGroup,
 //    private val saveCurrency: (currency: CurrencyDomainModel) -> Unit = {},
 //    private val removeFromSaved: (currency: CurrencyDomainModel) -> Unit = {}
-) : BaseViewHolder(parent, R.layout.item_bot_message) {
+) : BaseViewHolder(parent, R.layout.item_user_message) {
 
     private lateinit var binding: ItemBotMessageBinding
 
     override fun bind(model: BaseModel, viewHolder: BaseViewHolder) {
         binding = ItemBotMessageBinding.bind(itemView)
         with(binding) {
-            model as BotMessage
+            model as UserMessage
             bindMessage(model)
         }
     }
 
     private fun bindMessage(model: BaseModel) {
-        model as BotMessage
+        model as UserMessage
         with(binding) {
-            botMessage.text = model.answer
+            botMessage.text = model.message
         }
     }
 
@@ -46,7 +47,7 @@ class BotMessageHolder(
     }
 }
 
-class BotMessageDelegate(
+class UserMessageDelegate(
 //    private val saveCurrency: (currency: BotMessage) -> Unit = {},
 //    private val removeFromSaved: (currency: BotMessage) -> Unit = {}
 ) : AdapterDelegate {
@@ -58,5 +59,5 @@ class BotMessageDelegate(
 //            removeFromSaved
         )
 
-    override fun isValidType(baseModel: BaseModel): Boolean = baseModel is BotMessage
+    override fun isValidType(baseModel: BaseModel): Boolean = baseModel is UserMessage
 }
