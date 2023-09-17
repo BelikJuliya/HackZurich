@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.hackzurich.domain.model.BaseModel
 import com.example.hackzurich.domain.model.BotMessage
 import com.example.hackzurich.domain.PostMessageUseCase
+import com.example.hackzurich.domain.model.AudioMessage
 import com.example.hackzurich.domain.model.UserMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +25,7 @@ class MessageViewModel @Inject constructor(
     private val items = mutableListOf<BaseModel>()
     val itemsLiveData = MutableLiveData<MutableList<BaseModel>>()
     val clearInputLiveData = MutableLiveData<Boolean>()
-    var currentMessageText: String = ""
+    var currentMessageText = MutableLiveData<String>("")
     val TAG = this.javaClass.simpleName
 
     init {
@@ -38,13 +39,19 @@ class MessageViewModel @Inject constructor(
 
     fun postMessage() {
         viewModelScope.launch(Dispatchers.IO) {
-            val userMessage = UserMessage(
-                message = currentMessageText
-            )
-            mapItems(userMessage)
-            clearInputLiveData.postValue(true)
-            val botAnswer = postMessageUseCase.postMessage(userMessage)
-            mapItems(botAnswer)
+            if (!currentMessageText.value.isNullOrEmpty()) {
+                val userMessage = UserMessage(message = currentMessageText.value)
+                mapItems(userMessage)
+                clearInputLiveData.postValue(true)
+                val botAnswer = postMessageUseCase.postMessage(userMessage)
+                mapItems(botAnswer)
+            } else {
+                mapItems( AudioMessage())
+                clearInputLiveData.postValue(true)
+                val botAnswer = postMessageUseCase.postMessage(UserMessage())
+                mapItems(botAnswer)
+            }
+
         }
     }
 

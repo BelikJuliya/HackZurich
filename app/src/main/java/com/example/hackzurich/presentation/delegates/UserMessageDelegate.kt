@@ -24,12 +24,15 @@ class UserMessageHolder(
     override fun bind(model: BaseModel, viewHolder: BaseViewHolder) {
         binding = ItemUserMessageBinding.bind(itemView)
         model as UserMessage
-        val dateString = dateFormat.format(Date())
-        binding.messageDate.text = "Sent $dateString"
-        if (model.image == null) {
-            bindMessage(model)
-        } else {
-            bindImage(model)
+        with(binding) {
+            val dateString = dateFormat.format(Date())
+            messageDate.text = "Sent $dateString"
+            if (model.image == null) {
+                bindMessage(model)
+            } else {
+                bindImage(model)
+            }
+
         }
     }
 

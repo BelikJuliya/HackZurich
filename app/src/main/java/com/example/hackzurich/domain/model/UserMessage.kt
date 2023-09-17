@@ -6,7 +6,7 @@ import com.example.hackzurich.domain.BaseModelPayload
 data class UserMessage(
     val message: String? = null,
     val image: String? = null,
-    val bitmap: Bitmap? = null
+    val bitmap: Bitmap? = null,
 ): BaseModel {
 
     override fun isIdDiff(other: BaseModel): Boolean {
@@ -26,6 +26,8 @@ data class UserMessage(
             return payloads
         if (other.message != this.message)
             payloads.add(BaseModelPayload.MESSAGE)
+        if (other.image != this.image)
+            payloads.add(BaseModelPayload.IMAGE)
         return payloads
     }
 }

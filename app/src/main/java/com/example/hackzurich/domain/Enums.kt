@@ -1,5 +1,5 @@
 package com.example.hackzurich.domain
 
 enum class BaseModelPayload {
-    MESSAGE
+    MESSAGE, IMAGE, IS_AUDIO
 }

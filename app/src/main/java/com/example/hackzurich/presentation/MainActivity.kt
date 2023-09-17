@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private val viewModel: MessageViewModel by viewModels()
     private val binding: ActivityMainBinding by viewBinding()
 
-    lateinit var currentPhotoPath: String
+    private lateinit var currentPhotoPath: String
     private val CAMERA_PERMISSION_REQUEST_CODE = 1
     private val REQUEST_IMAGE_CAPTURE = 2
 
@@ -45,17 +45,26 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initUI()
-        viewModel.itemsLiveData.observe(this) {
-            messageAdapter.submitList(it)
-            try {
-                val newPosition = messageAdapter.itemCount - 1
-                binding.rvMessages.scrollToPosition(newPosition)
-            } catch (ex: ArrayIndexOutOfBoundsException) {
-                Log.e(TAG, "onCreate: ", ex)
+        with(binding) {
+            viewModel.itemsLiveData.observe(this@MainActivity) {
+                messageAdapter.submitList(it)
+                try {
+                    val newPosition = messageAdapter.itemCount - 1
+                    rvMessages.scrollToPosition(newPosition)
+                } catch (ex: ArrayIndexOutOfBoundsException) {
+                    Log.e(TAG, "onCreate: ", ex)
+                }
             }
-        }
-        viewModel.clearInputLiveData.observe(this) {
-            binding.etInput.text.clear()
+            viewModel.clearInputLiveData.observe(this@MainActivity) {
+                etInput.text.clear()
+            }
+            viewModel.currentMessageText.observe(this@MainActivity) {
+                if (it.isNotEmpty()) {
+                    btnSend.setImageDrawable(ContextCompat.getDrawable(this@MainActivity, R.drawable.ic_rocket_send))
+                } else {
+                    btnSend.setImageDrawable(ContextCompat.getDrawable(this@MainActivity, R.drawable.ic_microphone))
+                }
+            }
         }
     }
 
@@ -69,7 +78,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                 checkPermissions()
             }
             etInput.addTextChangedListener {
-                viewModel.currentMessageText = it.toString()
+                viewModel.currentMessageText.value = it.toString()
             }
         }
     }
